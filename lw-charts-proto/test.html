@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LW Charts Test</title>
+  <script src="https://unpkg.com/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script> <!-- CDN для стабильной версии -->
+</head>
+<body>
+  <div id="chart" style="width:600px; height:300px;"></div>
+  <script>
+    const chart = LightweightCharts.createChart(document.getElementById('chart'), { width: 600, height: 300 });
+    const candleSeries = chart.addCandlestickSeries({ upColor: '#26a69a', downColor: '#ef5350' });
+
+    // Генерация 10k свечей
+    const data = [];
+    let time = Date.now() / 1000 - 10000 * 3600;
+    let lastClose = 100;
+    for (let i = 0; i < 10000; i++) {
+      const open = lastClose;
+      const high = open + Math.random() * 10;
+      const low = open - Math.random() * 10;
+      const close = open + (Math.random() - 0.5) * 5;
+      data.push({ time, open, high, low, close });
+      time += 3600;
+      lastClose = close;
+    }
+    candleSeries.setData(data);
+
+    // Drawing tool: Простая линия (как data series, для user drawing используй plugins)
+    const lineSeries = chart.addLineSeries({ color: '#FF0000' });
+    lineSeries.setData(data.map(d => ({ time: d.time, value: d.close + 10 }))); // Пример линии над свечами
+
+    // Для полного drawing (линии, текст) — добавь plugin в код (локально)
+  </script>
+</body>
+</html>
